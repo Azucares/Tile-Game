@@ -49,9 +49,9 @@ public class Game implements Runnable{
 		
 		
 		
-		backgroundImage = ImageLoader.loadImage("/textures/yulpers.png") ;
-		testSheet = ImageLoader.loadImage("/textures/weaps.png") ;
-		sheet = new SpriteSheet(testSheet); 
+		//backgroundImage = ImageLoader.loadImage("/textures/yulpers.png") ;
+		//testSheet = ImageLoader.loadImage("/textures/weaps.png") ;
+		//sheet = new SpriteSheet(testSheet); 
 		
 		gameState = new GameState(this) ;
 		menuState = new MenuState(this);
@@ -77,10 +77,6 @@ public class Game implements Runnable{
 		if(State.getState() != null)
 			State.getState().render(g);
 		
-		g.drawImage(backgroundImage, 0, 0, null) ;
-		g.drawImage(sheet.crop(15, 56, 46, 54), 10, 10, null);
-		g.drawImage(Assets.bow, 35, 35, null) ;
-		g.drawImage(Assets.staff, 100, 75, null) ;
 		
 		bs.show();
 		g.dispose();

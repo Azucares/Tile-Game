@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import dev.azucares.tilegame.Game;
 import dev.azucares.tilegame.entities.creatures.Player;
+import dev.azucares.tilegame.tiles.Tile;
 
 public class GameState extends State {
 	private Player player ;
@@ -21,6 +22,7 @@ public class GameState extends State {
 	@Override
 	public void render(Graphics g) {
 		player.render(g);
+		Tile.tiles[0].render(g, 0, 0) ;
 	}
 
 }
