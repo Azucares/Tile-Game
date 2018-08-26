@@ -1,5 +1,6 @@
 package dev.azucares.tilegame.entities.creatures;
 
+import dev.azucares.tilegame.Game;
 import dev.azucares.tilegame.entities.Entity;
 
 public abstract class Creature extends Entity {
@@ -12,8 +13,8 @@ public abstract class Creature extends Entity {
 	protected float xMove ;
 	protected float yMove ;
 	
-	public Creature(float x, float y, int width, int height) {
-		super(x, y, width, height);
+	public Creature(Game game, float x, float y, int width, int height) {
+		super(game, x, y, width, height);
 		health = DEFAULT_HEALTH ;
 		speed = DEFAULT_SPEED ;
 		xMove = 0 ;

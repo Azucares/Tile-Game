@@ -1,13 +1,12 @@
 package dev.azucares.tilegame;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import dev.azucares.tilegame.display.Display;
 import dev.azucares.tilegame.gfx.Assets;
-import dev.azucares.tilegame.gfx.ImageLoader;
+import dev.azucares.tilegame.gfx.GameCamera;
 import dev.azucares.tilegame.gfx.SpriteSheet;
 import dev.azucares.tilegame.input.KeyManager;
 import dev.azucares.tilegame.states.GameState;
@@ -33,7 +32,11 @@ public class Game implements Runnable{
 	private State gameState;
 	private State menuState;
 	
+	//input
 	private KeyManager keyManager ;
+	
+	//camera
+	private GameCamera gameCamera ;
 	
 	public Game(String title, int width, int height){
 		this.width = width;
@@ -47,11 +50,7 @@ public class Game implements Runnable{
 		display.getFrame().addKeyListener(keyManager);
 		Assets.init();
 		
-		
-		
-		//backgroundImage = ImageLoader.loadImage("/textures/yulpers.png") ;
-		//testSheet = ImageLoader.loadImage("/textures/weaps.png") ;
-		//sheet = new SpriteSheet(testSheet); 
+		gameCamera = new GameCamera(0, 0) ;
 		
 		gameState = new GameState(this) ;
 		menuState = new MenuState(this);
