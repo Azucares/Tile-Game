@@ -2,18 +2,18 @@ package dev.azucares.tilegame.worlds;
 
 import java.awt.Graphics;
 
-import dev.azucares.tilegame.Game;
+import dev.azucares.tilegame.Handler;
 import dev.azucares.tilegame.tiles.Tile;
 import dev.azucares.tilegame.utils.Utils;
 
 public class World {
-	private Game game ;
+	private Handler handler ;
 	private int width, height, spawnX, spawnY ;
 	private int[][] tiles ;
 	
-	public World(Game game, String path){
+	public World(Handler handler, String path){
 		loadWorld(path) ;
-		this.game = game ;
+		this.handler = handler ;
 	}
 	
 	public void update(){
@@ -21,14 +21,24 @@ public class World {
 	}
 	
 	public void render(Graphics g){
-		for(int y = 0; y < height; y++){
-			for(int x = 0; x < width; x++){
-				getTile(x, y).render(g, x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
+		int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILEWIDTH) ;
+		int	xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth()) / Tile.TILEWIDTH + 1) ;
+		int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILEWIDTH) ;
+		int yEnd = (int) Math.min(height,  (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILEHEIGHT + 1) ;
+		
+		
+		for(int y = yStart; y < yEnd; y++){
+			for(int x = xStart; x < xEnd; x++){
+				getTile(x, y).render(g, (int)(x * Tile.TILEWIDTH - handler.getGameCamera().getxOffset()), (int)(y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
 			}
 		}
 	}
 	
 	public Tile getTile(int x, int y){
+		//return a grass tile if the player finds a way out of the map area
+		if(x < 0 || y < 0 || x >= width || y >= height)
+			return Tile.grassTile ;
+		
 		Tile t = Tile.tiles[tiles[x][y]] ;
 		if(t==null)
 			return Tile.rockTile ;

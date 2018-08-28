@@ -10,7 +10,7 @@ public class Tile {
 	
 	protected BufferedImage texture ;
 	protected final int id ;
-	public static final int TILEWIDTH = 32, TILEHEIGHT = 32 ;
+	public static final int TILEWIDTH = 64, TILEHEIGHT = 64 ;
 	
 	public Tile(BufferedImage texture, int id){
 		this.texture = texture ;

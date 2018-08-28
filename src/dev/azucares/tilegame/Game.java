@@ -15,8 +15,8 @@ import dev.azucares.tilegame.states.State;
 
 public class Game implements Runnable{
 	private Display display;
-	public int width, height;
-	public String title;
+	private int width, height;
+	private String title;
 	
 	private boolean running = false ;
 	private Thread thread;
@@ -38,6 +38,9 @@ public class Game implements Runnable{
 	//camera
 	private GameCamera gameCamera ;
 	
+	//handler
+	private Handler handler ;
+	
 	public Game(String title, int width, int height){
 		this.width = width;
 		this.height = height;
@@ -50,15 +53,16 @@ public class Game implements Runnable{
 		display.getFrame().addKeyListener(keyManager);
 		Assets.init();
 		
-		gameCamera = new GameCamera(0, 0) ;
+		gameCamera = new GameCamera(this, 0, 0) ;
+		handler = new Handler(this) ;
 		
-		gameState = new GameState(this) ;
-		menuState = new MenuState(this);
-		State.setState(gameState);
+		gameState = new GameState(handler) ;
+		menuState = new MenuState(handler) ;
+		State.setState(gameState) ;
 	}
 	
 	private void update(){
-		keyManager.update();
+		keyManager.update() ;
 		
 		if(State.getState() != null)
 			State.getState().update();
@@ -121,6 +125,18 @@ public class Game implements Runnable{
 		return keyManager ;
 	}
 	
+	public GameCamera getGameCamera(){
+		return gameCamera ;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public synchronized void start(){
 		if(running)
 			return;

@@ -1,14 +1,23 @@
 package dev.azucares.tilegame.gfx;
 
+import dev.azucares.tilegame.Game;
+import dev.azucares.tilegame.entities.Entity;
+
 public class GameCamera {
+	private Game game ;
 	private float xOffset, yOffset ;
 	
-	public GameCamera(float xOffset, float yOffset){
+	public GameCamera(Game game, float xOffset, float yOffset){
 		this.xOffset = xOffset ;
 		this.yOffset = yOffset ;
-		
+		this.game = game ;
 	}
 
+	public void centerOnEntity(Entity e){
+		xOffset = e.getX() - game.getWidth() / 2 + e.getWidth() / 2 ;
+		yOffset = e.getY() - game.getHeight() / 2 + e.getHeight() / 2;
+	}
+	
 	public void move(float xAmount, float yAmount){
 		xOffset += xAmount ;
 		yOffset += yAmount ;
