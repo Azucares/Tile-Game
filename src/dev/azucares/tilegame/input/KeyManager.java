@@ -2,6 +2,7 @@ package dev.azucares.tilegame.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.Array;
 
 public class KeyManager implements KeyListener {
 	private boolean[] keys;

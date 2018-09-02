@@ -9,6 +9,7 @@ import dev.azucares.tilegame.gfx.Assets;
 import dev.azucares.tilegame.gfx.GameCamera;
 import dev.azucares.tilegame.gfx.SpriteSheet;
 import dev.azucares.tilegame.input.KeyManager;
+import dev.azucares.tilegame.input.MouseManager;
 import dev.azucares.tilegame.states.GameState;
 import dev.azucares.tilegame.states.MenuState;
 import dev.azucares.tilegame.states.State;
@@ -29,11 +30,12 @@ public class Game implements Runnable{
 	private SpriteSheet sheet;
 	
 	//states
-	private State gameState;
-	private State menuState;
+	public State gameState;
+	public State menuState;
 	
 	//input
 	private KeyManager keyManager ;
+	private MouseManager mouseManager ;
 	
 	//camera
 	private GameCamera gameCamera ;
@@ -46,19 +48,25 @@ public class Game implements Runnable{
 		this.height = height;
 		this.title = title;
 		keyManager = new KeyManager();
+		mouseManager = new MouseManager() ;
 	}
 
 	private void init(){
 		display = new Display(title, width, height);
 		display.getFrame().addKeyListener(keyManager);
+		display.getFrame().addMouseListener(mouseManager);
+		display.getFrame().addMouseMotionListener(mouseManager);
+		display.getCanvas().addMouseListener(mouseManager);
+		display.getCanvas().addMouseMotionListener(mouseManager);
 		Assets.init();
+		
 		handler = new Handler(this) ;
 		gameCamera = new GameCamera(handler, 0, 0) ;
 		
 		
 		gameState = new GameState(handler) ;
 		menuState = new MenuState(handler) ;
-		State.setState(gameState) ;
+		State.setState(menuState) ;
 	}
 	
 	private void update(){
@@ -119,6 +127,10 @@ public class Game implements Runnable{
 		}
 		
 		stop();
+	}
+	
+	public MouseManager getMouseManager(){
+		return mouseManager ;
 	}
 	
 	public KeyManager getKeyManager(){

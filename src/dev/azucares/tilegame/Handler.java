@@ -2,6 +2,7 @@ package dev.azucares.tilegame;
 
 import dev.azucares.tilegame.gfx.GameCamera;
 import dev.azucares.tilegame.input.KeyManager;
+import dev.azucares.tilegame.input.MouseManager;
 import dev.azucares.tilegame.worlds.World;
 
 public class Handler {
@@ -22,6 +23,10 @@ public class Handler {
 	
 	public KeyManager getKeyManager(){
 		return game.getKeyManager() ;
+	}
+	
+	public MouseManager getMouseManager(){
+		return game.getMouseManager() ;
 	}
 	
 	public GameCamera getGameCamera(){

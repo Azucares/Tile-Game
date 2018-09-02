@@ -3,6 +3,9 @@ package dev.azucares.tilegame.worlds;
 import java.awt.Graphics;
 
 import dev.azucares.tilegame.Handler;
+import dev.azucares.tilegame.entities.EntityManager;
+import dev.azucares.tilegame.entities.Tree;
+import dev.azucares.tilegame.entities.creatures.Player;
 import dev.azucares.tilegame.tiles.Tile;
 import dev.azucares.tilegame.utils.Utils;
 
@@ -11,13 +14,21 @@ public class World {
 	private int width, height, spawnX, spawnY ;
 	private int[][] tiles ;
 	
+	//Entities
+	private EntityManager entityManager ;
+	
 	public World(Handler handler, String path){
-		loadWorld(path) ;
 		this.handler = handler ;
+		entityManager = new EntityManager(handler, new Player(handler, 300, 300)) ;
+		entityManager.addEntity(new Tree(handler, 100, 200));
+		loadWorld(path) ;
+		
+		entityManager.getPlayer().setX(spawnX);
+		entityManager.getPlayer().setY(spawnY) ;
 	}
 	
 	public void update(){
-		
+		entityManager.update();
 	}
 	
 	public void render(Graphics g){
@@ -32,6 +43,7 @@ public class World {
 				getTile(x, y).render(g, (int)(x * Tile.TILEWIDTH - handler.getGameCamera().getxOffset()), (int)(y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
 			}
 		}
+		entityManager.render(g);
 	}
 	
 	public Tile getTile(int x, int y){
@@ -68,5 +80,9 @@ public class World {
 	
 	public int getWidth(){
 		return width ;
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 }
