@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import dev.azucares.tilegame.Handler;
 import dev.azucares.tilegame.gfx.Assets;
+import dev.azucares.tilegame.networking.Server;
 import dev.azucares.tilegame.ui.ClickListener;
 import dev.azucares.tilegame.ui.UIImageButton;
 import dev.azucares.tilegame.ui.UIManager;
@@ -34,6 +35,10 @@ public class MenuState extends State {
 			@Override
 			public void onClick() {
 				handler.getMouseManager().setUIManager(null);
+				handler.getGame().setServer(new Thread(new Server(){
+					
+				}));
+				handler.getGame().getServer().start();
 				State.setState(handler.getGame().gameState);
 			}
 		}));

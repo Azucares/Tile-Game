@@ -12,10 +12,6 @@ public class UIImageButton extends UIObject {
 		this.images = images ;
 		this.clicker = clicker ;
 		
-		//bounds.x = (int) x ;
-		//bounds.y = (int) y ;
-		//bounds.width = bounds.x + width ;
-		//bounds.height = bounds.y + height ;
 	}
 
 	@Override

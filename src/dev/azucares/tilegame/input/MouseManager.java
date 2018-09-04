@@ -49,9 +49,9 @@ public class MouseManager implements MouseListener, MouseMotionListener {
 		// TODO Auto-generated method stub
 		mouseX = e.getX() ;
 		mouseY = e.getY();
-		
+		//System.out.println(mouseX + ", " + mouseY);
 		if(uiManager != null)
-			uiManager.onMouseRelease(e);
+			uiManager.onMouseMove(e);
 	}
 
 	@Override

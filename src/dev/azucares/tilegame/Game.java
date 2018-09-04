@@ -10,6 +10,7 @@ import dev.azucares.tilegame.gfx.GameCamera;
 import dev.azucares.tilegame.gfx.SpriteSheet;
 import dev.azucares.tilegame.input.KeyManager;
 import dev.azucares.tilegame.input.MouseManager;
+import dev.azucares.tilegame.networking.Server;
 import dev.azucares.tilegame.states.GameState;
 import dev.azucares.tilegame.states.MenuState;
 import dev.azucares.tilegame.states.State;
@@ -42,6 +43,9 @@ public class Game implements Runnable{
 	
 	//handler
 	private Handler handler ;
+	
+	//server
+	private Thread server ;
 	
 	public Game(String title, int width, int height){
 		this.width = width;
@@ -127,6 +131,14 @@ public class Game implements Runnable{
 		}
 		
 		stop();
+	}
+	
+	public Thread getServer(){
+		return server ;
+	}
+	
+	public void setServer(Thread server){
+		this.server = server ;
 	}
 	
 	public MouseManager getMouseManager(){
