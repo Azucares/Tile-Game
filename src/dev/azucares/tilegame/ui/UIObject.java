@@ -15,7 +15,7 @@ public abstract class UIObject {
 		this.y = y ;
 		this.width = width ;
 		this.height = height ;
-		bounds = new Rectangle((int) x, (int) y, (int) x + width, (int) y + height) ;
+		bounds = new Rectangle((int) x, (int) y, width, height) ;
 	}
 
 	public abstract void update() ;
@@ -23,7 +23,6 @@ public abstract class UIObject {
 	public abstract void onClick() ;
 	
 	public void onMouseMove(MouseEvent e){
-		System.out.println(e.getX() + " " + e.getY()) ;
 		if(bounds.contains(e.getX(), e.getY())){
 			hovering = true ;
 		}
