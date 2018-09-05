@@ -8,40 +8,76 @@ import dev.azucares.tilegame.Handler;
 
 public class UIManager {
 	private Handler handler ;
-	private ArrayList<UIObject> objects ;
+	private String currentMenu = "main" ;
+	private ArrayList<UIObject> mainMenu ;
+	private ArrayList<UIObject> multMenu ;
 	
 	
 	public UIManager(Handler handler){
 		this.handler = handler ;
-		objects = new ArrayList<UIObject>() ;
+		mainMenu = new ArrayList<UIObject>() ;
+		multMenu = new ArrayList<UIObject>() ;
 	}
 	
 	public void update(){
-		for(UIObject o : objects)
-			o.update();
+		if(currentMenu == "main"){
+			for(UIObject o : mainMenu)
+				o.update();
+		}
+		else if(currentMenu == "multiplayer"){
+			for(UIObject o : multMenu)
+				o.update();
+		}
 	}
 	
 	public void render(Graphics g){
-		for(UIObject o : objects)
-			o.render(g);
+		if(currentMenu == "main"){
+			for(UIObject o : mainMenu)
+				o.render(g);
+		}
+		else if(currentMenu == "multiplayer"){
+			for(UIObject o : multMenu)
+				o.render(g);
+		}
+			
 	}
 	
 	public void onMouseMove(MouseEvent e){
-		for(UIObject o : objects)
-			o.onMouseMove(e);
+		if(currentMenu == "main"){
+			for(UIObject o : mainMenu)
+				o.onMouseMove(e);
+		}
+		else if(currentMenu == "multiplayer"){
+			for(UIObject o : multMenu)
+				o.onMouseMove(e);
+		}
 	}
 	
 	public void onMouseRelease(MouseEvent e){
-		for(UIObject o : objects)
-			o.onMouseRelease(e); 
+		if(currentMenu == "main"){
+			for(UIObject o : mainMenu)
+				o.onMouseRelease(e);
+		}
+		else if(currentMenu == "multiplayer"){
+			for(UIObject o : multMenu)
+				o.onMouseRelease(e);
+		} 
 	}
 	
-	public void addObject(UIObject o){
-		objects.add(o) ;
+	public void addMainMenuObject(UIObject o){
+		mainMenu.add(o) ;
 	}
 	
-	public void removeObject(UIObject o){
-		objects.remove(o) ;
+	public void removeMainMenuObject(UIObject o){
+		mainMenu.remove(o) ;
+	}
+	
+	public void addMultiplayerObject(UIObject o){
+		multMenu.add(o) ;
+	}
+	
+	public void removeMultiplayerObject(UIObject o){
+		multMenu.remove(o) ;
 	}
 
 	public Handler getHandler() {
@@ -53,10 +89,22 @@ public class UIManager {
 	}
 
 	public ArrayList<UIObject> getObjects() {
-		return objects;
+		return mainMenu;
 	}
 
-	public void setObjects(ArrayList<UIObject> objects) {
-		this.objects = objects;
+	public void setMainMenuObjects(ArrayList<UIObject> mainObjects) {
+		this.mainMenu = mainObjects;
+	}
+	
+	public void setMultMenuObjects(ArrayList<UIObject> multObjects){
+		this.multMenu = multObjects ;
+	}
+
+	public String getCurrentMenu() {
+		return currentMenu;
+	}
+
+	public void setCurrentMenu(String currentMenu) {
+		this.currentMenu = currentMenu;
 	}
 }

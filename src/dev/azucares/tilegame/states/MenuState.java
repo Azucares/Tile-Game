@@ -21,7 +21,7 @@ public class MenuState extends State {
 		uiManager = new UIManager(handler) ;
 		handler.getMouseManager().setUIManager(uiManager);
 		
-		uiManager.addObject(new UIImageButton(buttonX, startY, 128, 64, Assets.menuButtons, new ClickListener(){
+		uiManager.addMainMenuObject(new UIImageButton(buttonX, startY, 128, 64, Assets.menuButtons, new ClickListener(){
 
 			@Override
 			public void onClick() {
@@ -30,16 +30,12 @@ public class MenuState extends State {
 			}
 		}));
 		
-		uiManager.addObject(new UIImageButton(buttonX, multY, 256, 64, Assets.menuButtons, new ClickListener(){
+		uiManager.addMainMenuObject(new UIImageButton(buttonX, multY, 256, 64, Assets.menuButtons, new ClickListener(){
 
 			@Override
 			public void onClick() {
-				handler.getMouseManager().setUIManager(null);
-				handler.getGame().setServer(new Thread(new Server(){
-					
-				}));
-				handler.getGame().getServer().start();
-				State.setState(handler.getGame().gameState);
+				uiManager.setCurrentMenu("multiplayer");
+				State.setState(handler.getGame().multState);
 			}
 		}));
 		monoFont = new Font("Monospaced", Font.BOLD | Font.ITALIC, 36);

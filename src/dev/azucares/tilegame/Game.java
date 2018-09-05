@@ -13,6 +13,7 @@ import dev.azucares.tilegame.input.MouseManager;
 import dev.azucares.tilegame.networking.Server;
 import dev.azucares.tilegame.states.GameState;
 import dev.azucares.tilegame.states.MenuState;
+import dev.azucares.tilegame.states.MultiplayerMenuState;
 import dev.azucares.tilegame.states.State;
 
 public class Game implements Runnable{
@@ -33,6 +34,7 @@ public class Game implements Runnable{
 	//states
 	public State gameState;
 	public State menuState;
+	public State multState;
 	
 	//input
 	private KeyManager keyManager ;
@@ -70,6 +72,7 @@ public class Game implements Runnable{
 		
 		gameState = new GameState(handler) ;
 		menuState = new MenuState(handler) ;
+		multState = new MultiplayerMenuState(handler) ;
 		State.setState(menuState) ;
 	}
 	
