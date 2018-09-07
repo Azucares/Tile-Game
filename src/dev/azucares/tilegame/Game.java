@@ -48,6 +48,7 @@ public class Game implements Runnable{
 	
 	//server
 	private Thread server ;
+	private Thread client ;
 	
 	public Game(String title, int width, int height){
 		this.width = width;
@@ -127,7 +128,7 @@ public class Game implements Runnable{
 			}
 			
 			if(timer >= 1000000000){
-				System.out.println("Ticks and Frames " + ticks);
+				//System.out.println("Ticks and Frames " + ticks);
 				ticks = 0 ;
 				timer = 0 ;
 			}
@@ -144,6 +145,14 @@ public class Game implements Runnable{
 		this.server = server ;
 	}
 	
+	public Thread getClient() {
+		return client;
+	}
+
+	public void setClient(Thread client) {
+		this.client = client;
+	}
+
 	public MouseManager getMouseManager(){
 		return mouseManager ;
 	}

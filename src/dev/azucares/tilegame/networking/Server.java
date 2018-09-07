@@ -1,39 +1,74 @@
 package dev.azucares.tilegame.networking;
 
+import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server implements Runnable {
-	ServerSocket server;
-	Socket connection;
-	ObjectInputStream input;
-	ObjectOutputStream output;
+	private ServerSocket server;
+	private Socket connection;
+	private BufferedReader input;
+	private PrintWriter output;
+	private String in ;
 
 	private void waitForConnection() throws IOException {
+		
 		System.out.println("waiting for Connection\n");
 		connection = server.accept();
 		System.out.println("Connection recieved from "
 				+ connection.getInetAddress().getHostName());
 	}
-
+	
+	private void connected(){
+		try {
+			input = new BufferedReader(new InputStreamReader(connection.getInputStream())) ;
+			output = new PrintWriter(connection.getOutputStream(), true) ;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("streams set");
+		try {
+			
+			
+			while(true){
+				System.out.println( (in = input.readLine()) == null);
+				
+				System.out.println(in);
+			}
+			
+		} catch (IOException e) {
+			System.out.println("could not read input");
+			e.printStackTrace();
+		}
+		
+	}
+/*
 	private void getStreams() throws IOException {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
-
-		input = new ObjectInputStream(connection.getInputStream());
+		System.out.println("got outputStream");
+		System.out.println(connection.getInputStream().toString());
+		//input = new ObjectInputStream(connection.getInputStream());
+		
 		System.out.println("got I/O streams");
 	}
 
 	private void processConnection() throws IOException {
-		sendData("Hello there!") ;
+		System.out.println("reading input");
+		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream())) ;
+		System.out.println("got input");
+		System.out.println(br.readLine());
 	}
 
+	
 	private void sendData(String message) {
 		try {
 			output.writeObject("SERVER>> " + message);
@@ -42,7 +77,7 @@ public class Server implements Runnable {
 			System.out.println("error writing object");
 		}
 	}
-
+*/
 	private void closeConnection() {
 		System.out.println("\nterminating connection");
 		try {
@@ -62,8 +97,7 @@ public class Server implements Runnable {
 			while (true) {
 				try {
 					waitForConnection();
-					getStreams();
-					processConnection();
+					connected();
 				} catch (EOFException eofException) {
 					System.out.println("Server Terminated connection");
 				} finally {
