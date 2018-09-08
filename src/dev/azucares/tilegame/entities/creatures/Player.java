@@ -26,7 +26,6 @@ public class Player extends Creature {
 		animDown.update();
 		getInput();
 		move();
-		handler.getGameCamera().centerOnEntity(this);
 	}
 
 	private void getInput(){

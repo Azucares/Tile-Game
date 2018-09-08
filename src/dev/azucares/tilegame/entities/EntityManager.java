@@ -10,6 +10,8 @@ import dev.azucares.tilegame.entities.creatures.Player;
 public class EntityManager {
 	private Handler handler ;
 	private Player player ;
+	private Player player2 ;
+	private Player currentPlayer ;
 	private ArrayList<Entity> entities ;
 	private Comparator<Entity> renderSorter = new Comparator<Entity>(){
 		public int compare(Entity a, Entity b){
@@ -23,6 +25,7 @@ public class EntityManager {
 	public EntityManager(Handler handler, Player player){
 		this.handler = handler ;
 		this.player = player ;
+		currentPlayer = player ;
 		entities = new ArrayList<Entity>() ;
 		addEntity(player) ;
 	}
@@ -33,6 +36,7 @@ public class EntityManager {
 			e.update() ;
 		}
 		entities.sort(renderSorter); 
+		handler.getGameCamera().centerOnEntity(currentPlayer);
 	}
 	
 	public void render(Graphics g){
@@ -43,6 +47,11 @@ public class EntityManager {
 	
 	public void addEntity(Entity e){
 		entities.add(e) ;
+	}
+	
+	public void addPlayer(Player player){
+		this.player2 = player ;
+		addEntity(player) ;
 	}
 
 	public Handler getHandler() {
@@ -59,6 +68,22 @@ public class EntityManager {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	public void setPlayer2(Player player2) {
+		this.player2 = player2;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 
 	public ArrayList<Entity> getEntities() {

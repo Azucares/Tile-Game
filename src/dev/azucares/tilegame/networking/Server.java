@@ -3,81 +3,143 @@ package dev.azucares.tilegame.networking;
 import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import dev.azucares.tilegame.Handler;
+import dev.azucares.tilegame.entities.creatures.Player;
+
 public class Server implements Runnable {
 	private ServerSocket server;
 	private Socket connection;
-	private BufferedReader input;
-	private PrintWriter output;
+	private InputStream input;
+	private OutputStream output;
 	private String in ;
+	private BufferedReader br ;
+	private Handler handler ;
+	private String[] player2Coords ;
+	private boolean connected ;
+	PrintWriter printout ;
 
+	public Server(Handler handler){
+		this.handler = handler ;
+	}
+	
+	private void serverInitialize(){
+		Thread waitForConnection = new Thread(){
+			public void run(){
+				System.out.println("waiting for connection");
+				try {
+					server = new ServerSocket(36000, 5);
+					connection = server.accept() ;
+					System.out.println("Connection recieved from " + connection.getInetAddress().getHostName());
+					connectionFound() ;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("stopped waiting for connection");
+				}
+			}
+		};
+		waitForConnection.start();
+	}
+	
+	public void connectionFound(){
+		try {
+			input = connection.getInputStream() ;
+			printout = new PrintWriter(connection.getOutputStream(), true) ;
+			br = new BufferedReader(new InputStreamReader(input)) ;
+			connected = true ;
+			sendToClient() ;
+			recieveFromClient() ;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("failed to process connection");
+			e.printStackTrace();
+		}
+		
+		handler.getWorld().getEntityManager().addPlayer(new Player(handler, 400, 400));
+	}
+	
 	private void waitForConnection() throws IOException {
 		
 		System.out.println("waiting for Connection\n");
 		connection = server.accept();
-		System.out.println("Connection recieved from "
-				+ connection.getInetAddress().getHostName());
+		connected = true ;
+		System.out.println("Connection recieved from " + connection.getInetAddress().getHostName());
+		
+	}
+	
+	private void sendToClient(){
+		Thread send = new Thread(){
+			public void run(){
+				while(connected){
+					printout.println(handler.getWorld().getEntityManager().getPlayer().getX() + " " + handler.getWorld().getEntityManager().getPlayer().getY());
+				}
+			}
+		};
+		send.start();
+	}
+	
+	private void recieveFromClient(){
+		Thread recieve = new Thread(){
+			public void run(){
+				while(connected){
+					String inFromClient ;
+					
+					try {
+						inFromClient = br.readLine() ;
+						player2Coords = inFromClient.split(" ") ;
+						handler.getWorld().getEntityManager().getPlayer2().setX(Float.parseFloat(player2Coords[0]));
+						handler.getWorld().getEntityManager().getPlayer2().setY(Float.parseFloat(player2Coords[1]));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		recieve.start();
 	}
 	
 	private void connected(){
 		try {
-			input = new BufferedReader(new InputStreamReader(connection.getInputStream())) ;
-			output = new PrintWriter(connection.getOutputStream(), true) ;
+			input = connection.getInputStream() ;
+			printout = new PrintWriter(connection.getOutputStream(), true) ;
+			br = new BufferedReader(new InputStreamReader(input)) ;
+			
+			handler.getWorld().getEntityManager().addPlayer(new Player(handler, 400, 400));
+			
+			String inFromClient ;
+			
+			if(br.ready()){
+				inFromClient = br.readLine() ;
+				player2Coords = inFromClient.split(" ") ;
+				handler.getWorld().getEntityManager().getPlayer2().setX(Float.parseFloat(player2Coords[0]));
+				handler.getWorld().getEntityManager().getPlayer2().setY(Float.parseFloat(player2Coords[1]));	
+			}
+			printout.println(handler.getWorld().getEntityManager().getPlayer().getX() + " " + handler.getWorld().getEntityManager().getPlayer().getY());	
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		System.out.println("streams set");
-		try {
-			
-			
-			while(true){
-				System.out.println( (in = input.readLine()) == null);
-				
-				System.out.println(in);
-			}
-			
-		} catch (IOException e) {
-			System.out.println("could not read input");
-			e.printStackTrace();
-		}
-		
-	}
-/*
-	private void getStreams() throws IOException {
-		output = new ObjectOutputStream(connection.getOutputStream());
-		output.flush();
-		System.out.println("got outputStream");
-		System.out.println(connection.getInputStream().toString());
-		//input = new ObjectInputStream(connection.getInputStream());
-		
-		System.out.println("got I/O streams");
+		} finally{
+			try {
+				input.close();
+				output.close();
+				br.close() ;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}		
 	}
 
-	private void processConnection() throws IOException {
-		System.out.println("reading input");
-		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream())) ;
-		System.out.println("got input");
-		System.out.println(br.readLine());
-	}
-
-	
-	private void sendData(String message) {
-		try {
-			output.writeObject("SERVER>> " + message);
-			output.flush();
-		} catch (IOException ioException) {
-			System.out.println("error writing object");
-		}
-	}
-*/
 	private void closeConnection() {
 		System.out.println("\nterminating connection");
 		try {
@@ -89,6 +151,11 @@ public class Server implements Runnable {
 		}
 	}
 
+	public void run(){
+		System.out.println("running server");
+		serverInitialize() ;
+	}
+	/*
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -109,5 +176,5 @@ public class Server implements Runnable {
 			Logger.getLogger(Server.class.getName())
 					.log(Level.SEVERE, null, ex);
 		}
-	}
+	}*/
 }

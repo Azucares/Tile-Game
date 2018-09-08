@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import dev.azucares.tilegame.Handler;
+import dev.azucares.tilegame.entities.creatures.Player;
 import dev.azucares.tilegame.gfx.Assets;
 import dev.azucares.tilegame.networking.Client;
 import dev.azucares.tilegame.networking.Server;
@@ -26,9 +27,7 @@ public class MultiplayerMenuState extends State {
 			@Override
 			public void onClick() {
 				handler.getMouseManager().setUIManager(null);
-				handler.getGame().setServer(new Thread(new Server(){
-					
-				}));
+				handler.getGame().setServer(new Thread(new Server(handler)));
 				handler.getGame().getServer().start();
 				State.setState(handler.getGame().gameState);
 			}
@@ -39,8 +38,9 @@ public class MultiplayerMenuState extends State {
 			@Override
 			public void onClick() {
 				handler.getMouseManager().setUIManager(null);
-				handler.getGame().setClient(new Thread(new Client(36000, "127.0.0.1")));
-				System.out.println(handler.getGame().getClient().toString());
+				handler.getWorld().getEntityManager().addPlayer(new Player(handler, 400, 400));
+				handler.getWorld().getEntityManager().setCurrentPlayer(handler.getWorld().getEntityManager().getPlayer2());
+				handler.getGame().setClient(new Thread(new Client(handler, 36000, "127.0.0.1")));
 				handler.getGame().getClient().start();
 				State.setState(handler.getGame().gameState);
 			}
